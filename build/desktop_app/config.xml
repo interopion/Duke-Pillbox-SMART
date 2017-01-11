@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<options>
+
+    <!-- Read data from here (backend API location) -->
+    <option type="string" name="backendHost">http://0.0.0.0:3001</option>
+
+    <!-- Mobile app location -->
+    <option type="string" name="mobileHost">http://0.0.0.0:8090</option>
+
+    <!-- Pooling interval for updating the record info in ms -->
+    <option type="string" name="poolDelay">3000</option>
+
+    <!--
+    If true when the clinician adds cutom meds to the list they will be merged
+    into it so that the sort order is preserved. Otherwise, the custom meds will
+    be appended at the end of the grid-view. Note that once the user clicks on
+    the grid header to sort the meds, that sort-merge will happen anyway.
+    -->
+    <option type="boolean" name="sortMergeCustomMeds">true</option>
+
+    <!--
+    Make sure that the medications are always rendered with a
+    capital first letter.
+    -->
+    <option type="boolean" name="autoCapitalizeMedNames">true</option>
+
+    <!--
+    Set a limit for the max. number of meds that can be passed to the
+    pillbox-mobile. If you don't set this (comment or remove this tag) then
+    the internal default of 50 will be used.
+    -->
+    <option type="number" name="maxMeds">50</option>
+
+</options>

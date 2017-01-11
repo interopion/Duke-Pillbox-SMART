@@ -1,0 +1,32 @@
+<table>
+    <tr>
+        <th>Patient Name:</th>
+        <td>
+            <% if (data.name) { %>
+                <%-data.name%>
+            <% } else { %>
+                <input type="text" name="name" class="sm"/>
+            <% } %>
+        </td>
+    </tr>
+    <tr>
+        <th>Birth Date:</th>
+        <td>
+            <% if (data.birthdate) { %>
+                <%-data.birthdate%>
+            <% } else { %>
+                <input type="text" name="birthdate" class="sm"/>
+            <% } %>
+        </td>
+    </tr>
+    <tr>
+        <th>MRN:</th>
+        <td>
+            <% if (data.mrn) { %>
+                <%-data.mrn%>
+            <% } else { %>
+                <input type="text" name="mrn" class="sm"/>
+            <% } %>
+        </td>
+    </tr>
+</table>

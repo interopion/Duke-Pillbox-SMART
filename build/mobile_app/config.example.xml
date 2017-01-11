@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<options>
+
+    <!-- Send save requests here -->
+    <option type="string" name="backendHost">http://0.0.0.0:3001</option>
+
+    <!-- The duration of the "replay" animations in ms -->
+    <option type="number" name="playbackSpeed">800</option>
+
+    <!-- Pause between replay frames in ms (not implemented!) -->
+    <option type="number" name="playbackGap">500</option>
+
+    <!-- Try to fetch pill images (experimental) -->
+    <option type="boolean" name="showPillImages">false</option>
+
+    <!-- Will save and exit when everything matches the correct order -->
+    <option type="boolean" name="autoExit">false</option>
+
+    <!-- If true, will save on any change -->
+    <option type="boolean" name="autoSave">false</option>
+
+    <!--
+    Make sure that the medications are always rendered with capital first letter.
+    -->
+    <option type="boolean" name="autoCapitalizeMedNames">true</option>
+
+    <!--
+    This should be set to "https://rximage.nlm.nih.gov". However, that server
+    is often having some issues and does not always provide CORS headers in it's
+    responses. For that reason we have put together a dedicated proxy at
+    "https://pillbox.medapptech.com:7001/rximage".
+    NOTE: In case you are concerned about security you can implement such proxy
+    yourself and set it's url here!
+    -->
+    <option type="string" name="nihImageServiceURL">https://pillbox.medapptech.com:7001/rximage</option>
+
+    <!--
+    This should be set to "https://rximage.nlm.nih.gov". However, that server
+    is often having some issues and does not always provide CORS headers in it's
+    responses. For that reason we have put together a dedicated proxy at
+    "https://pillbox.medapptech.com:7001/rxnav".
+    NOTE: In case you are concerned about security you can implement such proxy
+    yourself and set it's url here!
+    -->
+    <option type="string" name="nihNameServiceURL">https://pillbox.medapptech.com:7001/rxnav</option>
+
+</options>

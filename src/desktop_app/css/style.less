@@ -1,0 +1,455 @@
+@import "../../less_framework/variables.less";
+@import "../../less_framework/mixins.less";
+
+::-moz-selection { .selected; }
+::selection { .selected; }
+
+body {
+    font-family: "Helvetica Neue", Tahoma, sans-serif;
+    font-size  : 16px;
+    margin: 0;
+    padding: 0;
+    /*background : #AAA;*/
+}
+
+.text-muted  { color : #999; }
+.text-left   { text-align: left; }
+.text-right  { text-align: right; }
+.text-center { text-align: center; }
+.pull-left   { float: left;  }
+.pull-right  { float: right; }
+
+.loading-indicator {
+    background: none repeat scroll 0 0 #fec;
+    border-radius: 0 0 5px 5px;
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1), 0 1px 3px -1px #000;
+    font-weight: bold;
+    left: 50%;
+    margin-left: -62px;
+    padding: 6px 12px;
+    position: absolute;
+    text-align: center;
+    top: 0;
+    width: 100px;
+    .transform(~"translateY(-35px)");
+    -webkit-transition: all 0.4s ease;
+    -moz-transition: all 0.4s ease;
+    transition: all 0.4s ease;
+}
+
+.loading-indicator.visible {
+    .transform(~"translateY(0)");
+}
+
+a {
+    text-decoration: none;
+    color: #045494;
+
+    img {
+        border: none;
+    }
+}
+a:hover {
+    text-decoration: underline;
+}
+a:disabled,
+a.disabled {
+    color  : #000;
+    opacity: 0.3;
+    pointer-events: none;
+    cursor : default;
+}
+
+
+
+
+
+
+
+
+@import "../../less_framework/form_elements.less";
+@import "../../less_framework/grid.less";
+
+
+/* patient-info ------------------------------------------------------------- */
+.patient-info {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    padding: 5px 10px;
+    background: #F6F6F6;
+    border-radius: 5px;
+    .transform(~"translateX(10px)");
+    opacity: 0;
+    .transition(all 0.6s ease 1.4s);
+
+    &.visible {
+        opacity: 1;
+        .transform(~"translateX(0)");
+    }
+
+    table {
+        border-spacing: 0;
+    }
+    th {
+        text-align: right;
+        color: #777;
+        padding: 3px 6px 3px 0;
+    }
+}
+
+/* grid-view ---------------------------------------------------------------- */
+#grid {
+    display : inline-block;
+    width   : 60%;
+    vertical-align: top;
+    padding-left: 10px;
+    .border-box;
+}
+.grid-view {
+
+}
+
+.search-match {
+    background   : #FFCF39;
+    box-shadow   : 0 0 1px rgba(255, 255, 255, 0.8) inset, 0 0 1px rgba(0, 0, 0, 0.99);
+    border-radius: 2px;
+    text-shadow  : 0 0 1px #FFF;
+    color        : #000 !important;
+}
+
+aside {
+    display: block;
+    width: 40%;
+    float: right;
+    padding-left: 10px;
+    .border-box;
+}
+.grid-view .grid-paginator {
+    margin-top: 1em;
+}
+.grid-view .grid-paginator .btns {
+    float: right;
+}
+.grid-view .grid-paginator .btns a + a {
+    margin-left: 1ex;
+}
+
+table.grid tr.disabled {
+    select, input.qty {
+        background    : #EEE;
+        color         : #999 !important;
+        pointer-events: none;
+        border-color  : transparent;
+        opacity       : 1 !important;
+        text-shadow   : 0 1px 0 #FFF;
+    }
+
+    .step-input {
+        .btn-up, .btn-down {
+            display: none;
+        }
+    }
+}
+
+table.grid tr.invalid {
+    color: #900;
+    background: #FFE0D4 !important;
+    opacity: 0.5 !important;
+
+    select, input.qty {
+        color: #900;
+        border-color: #900;
+        pointer-events: auto !important;
+    }
+    input[type="checkbox"] {
+        display: none;
+    }
+}
+
+table.grid select, table.grid input[type="number"] {
+    width: 100%;
+    height: 30px;
+    line-height: 1;
+    padding: 2px 2px 2px 4px;
+}
+
+hr {
+    border-top: 1px solid rgba(0, 0, 0, 0.2);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.8);
+    border-left: none;
+    border-right: none;
+}
+
+#main {
+    width : 80%;
+    margin: 0 auto;
+    padding: 20px;
+    min-width: 800px;
+    position: relative;
+}
+
+#overlay {
+    position   : fixed;
+    top        : 0;
+    left       : 0;
+    right      : 0;
+    bottom     : 0;
+    z-index    : 100;
+    box-shadow : 0 1px 10px -2px #000;
+    display    : none;
+    background : rgba(0, 0, 0, 0.4);
+
+    .modal-open & {
+        display: block;
+    }
+}
+
+// .modal {
+//     position     : absolute;
+//     top          : 3%;
+//     left         : 50%;
+//     width        : 600px;
+//     padding      : 10px;
+//     border       : 1px solid #666;
+//     margin       : auto;
+//     z-index      : 200;
+//     box-shadow   : 0 1px 10px -2px #000;
+//     background   : #FFF;
+//     margin-left  : -311px;
+//     border-radius: 5px;
+// }
+
+.modal {
+    position     : fixed;
+    top          : 50%;
+    left         : 50%;
+    width        : 600px;
+    padding      : 10px;
+    border       : 1px solid #666;
+    margin       : auto;
+    z-index      : 200;
+    box-shadow   : 0 1px 10px -2px #000;
+    background   : #FFF;
+    border-radius: 5px;
+    max-height   : 90%;
+    max-width    : 90%;
+    overflow     : auto;
+    .transform(~"translate(-50%, -50%)");
+}
+
+#translation-manager {
+    border-radius: 3px;
+    padding: 1px;
+    width: 800px;
+
+    iframe {
+        display: block;
+        width: 100%;
+        border: none;
+        height: 600px;
+    }
+}
+
+#replay {
+    width: 1066px;
+
+    iframe {
+        display: block;
+        border : 0px none;
+    }
+
+    a.close-modal-btn {
+        margin: -3px -3px 6px 2px;
+    }
+}
+
+#result {
+}
+a.close-modal-btn {
+    float: right;
+    height: 24px;
+    padding: 0;
+    position: relative;
+    background: #FFF !important;
+    border: 6px solid;
+    border-color: #ee4433 !important;
+    width: 24px;
+    border-radius:30px;
+    transition: border 0.2s;
+
+    &:hover {
+        border-width:4px;
+    }
+
+    &:before {
+        content : "";
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 0;
+        height: 4px;
+        margin: -8px 0 0 -6px;
+        border: 6px solid;
+        border-color: #ee4433 transparent;
+    }
+
+    &:after {
+        content : "";
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 4px;
+        height: 0px;
+        margin: -6px 0 0 -8px;
+        border: 6px solid;
+        border-color: transparent #ee4433;
+    }
+
+    &:focus, &:active {
+        outline: none;
+        box-shadow: none;
+    }
+}
+
+// The QRcode popup ------------------------------------------------------
+#result {
+    width     : 80%;
+    height    : auto;
+    max-width : 600px;
+    max-height: 630px;
+    min-width : 300px;
+    min-height: 300px;
+    overflow  : visible;
+    box-sizing: border-box;
+    padding   : 40px 10px 10px 10px;
+
+    #qrlen {
+        float : right;
+        color :#666;
+        margin: -30px 0 5px;
+    }
+
+    b {
+        color      : #393;
+        white-space: nowrap;
+        overflow   : hidden;
+        text-overflow: ellipsis;
+        display    : inline-block;
+        position   : absolute;
+        top        : 10px;
+        right      : 40px;
+        left       : 10px;
+    }
+
+    canvas {
+        visibility: hidden;
+        position: absolute;
+        display: none;
+    }
+
+    #qrcode {
+        clear     : both;
+        display   : block;
+        position  : relative;
+        top       : 0;
+        left      : 0;
+        right     : 0;
+        bottom    : 0;
+        height    : 0;
+        text-align: center;
+        padding   : 100% 0 0 0;
+
+        img {
+            margin    : 0;
+            display   : block;
+            position  : absolute;
+            left      : 0;
+            top       : 0;
+            right     : 0;
+            bottom    : 0;
+            width     : 100%;
+            height    : 100%;
+        }
+    }
+}
+
+.tabs {
+    .tab {
+        display: block;
+        float  : left;
+        padding: 8px 32px;
+        margin : 0 0 0 8px;
+        border : 1px solid #DDD;
+        border-bottom: none;
+        background: #F8F8F8;
+        color: #666;
+        border-radius: 4px 4px 0 0;
+        cursor: pointer;
+
+        &.active {
+            padding: 8px 32px 9px;
+            margin-bottom: -1px;
+            background: #FFF;
+            border-color: #CCC;
+            color: #000;
+        }
+    }
+
+    .tab-panel {
+        clear: both;
+        display: none;
+
+        &:before {
+            content : "";
+            display: block;
+            border-top: 1px solid #CCC;
+        }
+
+        &.active {
+            display: block;
+        }
+    }
+
+    &:after {
+        content : "";
+        display: block;
+        clear: both;
+    }
+}
+
+.report {
+    table {
+        font-size: 14px;
+        width: 100%;
+        margin: 0 0 45px 0;
+        border-spacing: 0;
+        border-collapse: collapse;
+
+        th {
+            text-align: right;
+            color: #666;
+            text-shadow: 0 1px 0 #FFF;
+        }
+
+        td, th {
+            padding: 4px 8px;
+            border-bottom: 1px solid #EEE;
+        }
+
+        &.meds {
+            th {
+                text-align: left;
+                background: #F6F6F6;
+            }
+        }
+    }
+}
+
+@media print {
+    .hidden-print {
+        display: none;
+    }
+}
+
+@import "step_input.less";

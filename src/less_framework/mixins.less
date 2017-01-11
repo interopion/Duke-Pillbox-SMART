@@ -1,0 +1,48 @@
+.transform(@args) {
+  -webkit-transform: @args;
+     -moz-transform: @args;
+      -ms-transform: @args;
+       -o-transform: @args;
+          transform: @args;
+}
+
+.transform-origin(@x:50%, @y:50%, @z:0) {
+  -webkit-transform-origin: @x @y @z;
+     -moz-transform-origin: @x @y @z;
+      -ms-transform-origin: @x @y @z;
+       -o-transform-origin: @x @y @z;
+          transform-origin: @x @y @z;
+}
+
+.transition(@args) {
+  -webkit-transition: @args;
+     -moz-transition: @args;
+      -ms-transition: @args;
+       -o-transition: @args;
+          transition: @args;
+}
+
+.unselectable {
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
+}
+
+.border-box {
+  -webkit-box-sizing: border-box;
+     -moz-box-sizing: border-box;
+          box-sizing: border-box;
+}
+
+.ellipsis {
+  white-space  : nowrap;
+  overflow     : hidden;
+  text-overflow: ellipsis;
+}
+
+.selected {
+  background : @color-selection-bg;
+  color      : @color-selection-fg;
+  text-shadow: 0 1px 0 #000; 
+}
+

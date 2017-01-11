@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta charset="utf-8">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black">
+        <meta name="format-detection" content="telephone=no">
+        <meta name="viewport" content="width=device-width, maximum-scale=1, user-scalable=no">
+        <title>Duke PillBox v<%-pkg.version%></title>
+        <link rel="stylesheet" type="text/css" href="css/style.css?v=<%-pkg.version%>">
+    </head>
+    <body class="empty">
+
+        <div class="pillbox-header">
+            <h1>
+                <span style="color:#FFF">Duke</span>PillBox
+                <span class="version">v<%-pkg.version%></span>
+            </h1>
+            <div class="pull-right">
+                <span class="patient-info" style="font-weight:200"></span>
+            </div>
+            <!--
+            <div class="language-selector"></div>
+            <div class="history-toolbar">
+                <a href="#" data-cmd="undoAll" class="disabled"><i class="icon icon-backward"></i></a>
+                <a href="#" data-cmd="undo"    class="disabled"><i class="icon icon-undo"></i></a>
+                <a href="#" data-cmd="redo"    class="disabled"><i class="icon icon-redo"    ></i></a>
+                <a href="#" data-cmd="redoAll" class="disabled"><i class="icon icon-forward2"></i></a>
+            </div>
+            -->
+        </div>
+
+        <div class="pillbox-layout"></div>
+        <footer>
+            <table>
+                <tr>
+                    <td>
+                        <a href="javascript:void 0" class="btn-exit">
+                            <i class="icon icon-floppy-disk"></i>
+                            <span data-translatecontent="headerButtons.finish"></span>
+                        </a>
+                    </td>
+                    <td>
+                        <a href="javascript:void 0" class="btn-check">
+                            <i class="icon icon-power"></i>
+                            <span data-translatecontent="headerButtons.check"></span>
+                        </a>
+                    </td>
+                    <td>
+                        <a href="javascript:void 0" class="btn-hint">
+                            <i class="icon icon-magic-wand"></i>
+                            <span data-translatecontent="headerButtons.hint"></span>
+                        </a>
+                    </td>
+                    <td>
+                        <a href="javascript:void 0" class="btn-help">
+                            <i class="icon icon-lifebuoy"></i>
+                            <span data-translatecontent="headerButtons.help"></span>
+                        </a>
+                    </td>
+                    <td>
+                        <a href="javascript:void 0" class="btn-clear">
+                            <i class="icon icon-loop2"></i>
+                            <span data-translatecontent="headerButtons.clear"></span>
+                        </a>
+                    </td>
+                    <td style="width:100px;font-size:130%">
+                        <a href="javascript:App.toggleMenu();" class="menu-toggle">
+                            <i class="icon icon-ellipsis-h"></i>
+                        </a>
+                    </td>
+                </tr>
+            </table>
+            <div id="menu">
+                <a href="javascript:App.print();" class="hidden-touch">
+                    <i class="icon icon-cale"></i>
+                    <span data-translatecontent="headerButtons.print"></span>
+                </a>
+                <div class="divider hidden-touch"></div>
+                <a href="javascript: App.reportTakenMeds();">
+                    <i class="icon icon-calendar-check-o"></i>
+                    <span data-translatecontent="common.report_taken_meds"></span>
+                </a>
+                <div class="divider"></div>
+                <a href="javascript:App.sendFeedback();">
+                    <i class="icon icon-comment-o"></i>
+                    <span data-translatecontent="common.give_feedback"></span>
+                </a>
+                <div class="divider"></div>
+                <a href="javascript:App.selectLanguage();">
+                    <i class="icon icon-language2"></i>
+                    <span data-translatecontent="common.select_language"></span>
+                </a>
+            </div>
+        </footer>
+
+        <!-- ========================= MODALS ============================== -->
+        <div class="modal-overlay"></div>
+
+        <!-- Open Scanner Screen -->
+        <div class="modal launchscan" style="display:none">
+            <div class="modal-header" data-translatecontent="dialogs.wellcome.title"></div>
+            <div class="modal-body">
+                <div class="scroller">
+                    <div data-translatecontent="dialogs.scan"></div>
+                    <br>
+                    <div>
+                        <b class="message" style="color:darkred;margin-bottom:20px"></b>
+                    </div>
+                    <br clear="all">
+                    <div class="text-center">
+                        <a class="btn btn-primary scan-btn"
+                            href="dukepillbox://openQRCodeScanner">
+                            <i class="icon icon-qrcode"></i>&nbsp;
+                            <span data-translatecontent="headerButtons.scan"></span>
+                        </a>
+                    </div>
+                    <br>
+                </div>
+            </div>
+        </div>
+
+        <!-- Wellcome Screen -->
+        <div class="modal wellcome" style="display:none">
+            <div class="modal-header" data-translatecontent="dialogs.wellcome.title"></div>
+            <div class="modal-body">
+                <div class="scroller">
+                    <div data-translatecontent="dialogs.wellcome.contents"></div>
+                    <br>
+                    <div class="text-center">
+                        <button class="btn btn-primary close-btn"
+                            onclick="App.history.start();">
+                            <i class="icon icon-play2"></i>
+                            <span data-translatecontent="dialogs.wellcome.startButton"></span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Help Dialog -->
+        <div class="modal help kbd" style="display:none">
+            <div class="modal-header">
+                <i class="icon icon-lifebuoy"></i>
+                <span data-translatecontent="dialogs.help.title"></span>
+                <i class="icon icon-cancel-circle close-btn"></i>
+            </div>
+            <div class="modal-body">
+                <div class="scroller">
+                    <div data-translatecontent="dialogs.help.paragraph1"></div>
+                    <div class="box-descriptions">
+                        <div>
+                            <img src="img/morning.svg">
+                            <span data-translatecontent="dialogs.help.li1"></span>
+                        </div>
+                        <div>
+                            <img src="img/noon.svg">
+                            <span data-translatecontent="dialogs.help.li2"></span>
+                        </div>
+                        <div>
+                            <img src="img/evening.svg">
+                            <span data-translatecontent="dialogs.help.li3"></span>
+                        </div>
+                        <div>
+                            <img src="img/bed.svg">
+                            <span data-translatecontent="dialogs.help.li4"></span>
+                        </div>
+                        <div>
+                            <img src="img/weekly.svg">
+                            <span data-translatecontent="dialogs.help.li5"></span>
+                        </div>
+                        <div>
+                            <img src="img/as_needed.svg">
+                            <span data-translatecontent="dialogs.help.li6"></span>
+                        </div>
+                    </div>
+                    <ul>
+                        <li data-translatecontent="dialogs.help.li7"></li>
+                        <li data-translatecontent="dialogs.help.li8"></li>
+                        <li data-translatecontent="dialogs.help.li9"></li>
+                        <li data-translatecontent="dialogs.help.li10"></li>
+                        <li data-translatecontent="dialogs.help.li11"></li>
+                    </ul>
+                    <p data-translatecontent="dialogs.help.footer"></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Thank you Screen -->
+        <div class="modal thankyou" style="display:none">
+            <div class="modal-header"  data-translatecontent="dialogs.thankyou.title"></div>
+            <div class="modal-body">
+                <div class="scroller">
+                    <p data-translatecontent="dialogs.thankyou.contents"></p>
+                    <p class="text-center"><b class="score"></b></p>
+                    <div class="text-center">
+                        <button class="btn btn-default"
+                                onclick="App.history.replay();"
+                                style="min-width:30%">
+                            <i class="icon icon-film2"></i>
+                            <span data-translatecontent="common.replay"></span>
+                        </button>
+                        <button class="btn btn-default btn-reload"
+                                onclick="location.reload();"
+                                style="min-width:30%;margin-left: 1ex">
+                            <i class="icon icon-spinner11"></i>
+                            <span data-translatecontent="common.try_again"></span>
+                        </button>
+                        <a class="btn btn-default scan-btn"
+                           href="dukepillbox://openQRCodeScanner"
+                           style="min-width: 35%;margin-left: 1ex">
+                            <i class="icon icon-qrcode"></i>&nbsp;
+                            <span data-translatecontent="headerButtons.scan"></span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Error Message Dialog -->
+        <div class="modal error danger" style="display:none">
+            <div class="modal-header">
+                <i class="icon icon-warning"></i>
+                <span data-translatecontent="common.Error"></span>
+            </div>
+            <div class="modal-body">
+                <div class="scroller">
+                    <pre></pre>
+                </div>
+            </div>
+        </div>
+
+        <!-- Select Language Dialog -->
+        <div class="modal select-language kbd" style="display:none">
+            <div class="modal-header">
+                <i class="icon icon-language2"></i>
+                <span data-translatecontent="common.select_language"></span>
+            </div>
+            <div class="modal-body">
+                <div class="scroller">
+                    <br>
+                    <ul class="list-nav language-selector"></ul>
+                    <br>
+                </div>
+                <br clear="all">
+                <div class="text-center">
+                    <a class="btn btn-primary close-btn" href="#">
+                        <span data-translatecontent="common.Close"></span>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Feedback Dialog -->
+        <div class="modal feedback kbd" style="display:none">
+            <div class="modal-header">
+                <i class="icon icon-comment-o"></i>
+                <span data-translatecontent="common.give_feedback"></span>
+            </div>
+            <div class="modal-body">
+                <div class="scroller">
+                    <input type="text" placeholder="Subject (optional)" id="feedback-subject">
+                    <textarea rows="6" id="feedback-message"></textarea>
+                    <br>
+                </div>
+                <br clear="all">
+                <div class="text-center">
+                    <button class="btn btn-default close-btn" style="min-width:140px">
+                        <span data-translatecontent="common.cancel"></span>
+                    </button>
+                    &nbsp;
+                    <button class="btn btn-primary" style="min-width:140px">
+                        <span data-translatecontent="common.send"></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Report dialog -->
+        <div class="modal report kbd" style="display:none">
+            <div class="modal-header">
+                <i class="icon icon-calendar-check-o"></i>
+                <span data-translatecontent="common.report_taken_meds"></span>
+            </div>
+            <div class="modal-body">
+                <div class="scroller">Loading...</div>
+                <div class="buttons">
+                    <button class="btn btn-default close-btn" style="min-width:140px">
+                        <span data-translatecontent="common.cancel"></span>
+                    </button>
+                    &nbsp;
+                    <button class="btn btn-primary" style="min-width:140px" disabled>
+                        <span data-translatecontent="common.send"></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <script type="text/javascript" src="js/libs.js?v=<%-pkg.version%>"></script>
+        <script type="text/javascript" src="js/app.js?v=<%-pkg.version%>"></script>
+        <script type="text/javascript">
+        $(function() {
+            App.init({
+                layout : ".pillbox-layout"
+            });
+        });
+        </script>
+    </body>
+</html>

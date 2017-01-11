@@ -1,0 +1,40 @@
+<?xml version="1.0" ?>
+<!DOCTYPE svg  PUBLIC '-//W3C//DTD SVG 1.0//EN'  'http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd'>
+<svg enable-background="new 0 0 24 24" 
+	id="Layer_1" 
+	version="1.0" 
+	viewBox="0 0 24 24" 
+	xml:space="preserve" 
+	xmlns="http://www.w3.org/2000/svg" 
+	xmlns:xlink="http://www.w3.org/1999/xlink">
+	
+	<polyline fill="none" 
+		points="12,7 12,12 15,15" 
+		stroke="#000000" 
+		stroke-opacity="0.5" 
+		stroke-miterlimit="10" 
+		stroke-width="2"/>
+
+	<!-- Evening Red 110-170deg -->
+	<path d="
+		M 13.215537243668514 18.893654271085456
+		A 7 7 -60 0 0 18.57784834550136 14.394141003279682
+		L 22.336618828644994 15.762221576582355
+		A 11 11 60 0 1 13.910129954336238 22.83288528313429
+		Z"
+		stroke="#900" 
+		stroke-width="0.5"
+		fill="red"
+		fill-opacity="0.5"/>
+
+	
+
+	<!-- Evening Black 180-100deg -->
+	<path d="
+		M 12 21
+		A 9 9 -240 1 1 20.86326977710987 13.562833599002373"
+		stroke="#000" 
+		stroke-width="2"
+		stroke-opacity="0.5" 
+		fill="none"/>
+</svg>

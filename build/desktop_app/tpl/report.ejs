@@ -1,0 +1,64 @@
+<div class="report">
+    <h3 class="text-center">Statistics</h3>
+    <table style="background:#F6F6F6">
+        <col width="150"/>
+        <col/>
+        <col width="150"/>
+        <col/>
+        <tbody>
+            <tr>
+                <th>Date</th>
+                <td><%-new Date(data.data.time).toLocaleString() %></td>
+                <th>Help used</th>
+                <td><%-data.data.stats.counts.help%></td>
+            </tr>
+            <tr>
+                <th>Time spent</th>
+                <td>
+                    <%- data.data.stats.endTime ?
+                        App.util.formatTime(data.data.stats.endTime - data.data.stats.startTime) :
+                        "N/A"
+                    %>
+                </td>
+                <th>Hint used</th>
+                <td><%-data.data.stats.counts.hint%></td>
+            </tr>
+            <tr>
+                <th>Status</th>
+                <td><%-data.data.completePct == 100 ? "completed" : "not completed"%></td>
+                <th>Check used</th>
+                <td><%-data.data.stats.counts.check%></td>
+            </tr>
+            <tr>
+                <th>Total actions</th>
+                <td><%-data.data.stats.counts.actions%></td>
+                <th>Clear used</th>
+                <td><%-data.data.stats.counts.clear%></td>
+            </tr>
+        <tbody>
+    </table>
+    <h3 class="text-center">Used Medications</h3>
+    <table class="meds">
+        <tr>
+            <th>rxnorm</th>
+            <th>Medication</th>
+            <th>Interval</th>
+            <th>Quantity</th>
+        </tr>
+        <%_.each(data.data.medications, function(med) {%>
+            <tr>
+                <td><%-med.rxnorm%></td>
+                <td><%-med.name%></td>
+                <td nowrap><%-App.util.pillboxTime(med.dosage) || ""%></td>
+                <td><%-(med.qty + "" == "0" ? "As Needed" : med.qty)%></td>
+            </tr>
+        <%});%>
+    </table>
+    <p class="text-center hidden-print">
+        <button style="width:10em" onclick="print();">Print Report</button>
+        &nbsp;
+        <button style="width:10em" onclick="printPillbox();">Print Pillbox</button>
+        &nbsp;
+        <button style="width:10em" class="btn-replay">Replay</button>
+    </p>
+</div>

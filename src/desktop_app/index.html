@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta charset="utf-8">
+        <title>PillBox Scenario Constructor v<%-pkg.version%></title>
+        <link rel="stylesheet" href="css/style.css?v=<%-pkg.version%>" />
+        <link rel="icon" type="image/png" href="favicon.png" />
+    </head>
+    <body>
+        <div id="overlay"></div>
+        <div id="all-meds-popup" class="modal kbd" style="display:none"></div>
+        <div id="main">
+            <h1 style="font-size: 40px; line-height:1; color:#2B556B;margin: 0 0 20px">
+                <img src="img/icon.png" width="64" style="vertical-align: top;margin:-10px 0 -10px 8px">
+                <span style="/*color:#8099A6*/">Duke</span> PillBox
+            </h1>
+            <div class="patient-info"></div>
+            <div class="tabs">
+                <div class="tab active" data-id="create">Create New Exercise</div>
+                <% if (!process.env.BUILD_FOR_DUKE) { %><div class="tab" data-id="report">View Last Exercise</div><% } %>
+                <div class="tab-panel active" data-id="create">
+                    <div id="data-collector">
+                        <h3>
+                            Please review PillBox medication list and dosing
+                            schedule for accuracy, and make adjustments as needed
+                        </h3>
+                        <div class="patient-meds"></div><br/>
+                        <p>
+                            <button type="button"
+                                autocomplete="off"
+                                style="float:right"
+                                id="generate"
+                                class="btn-success"
+                                disabled>
+                                &#10004; LAUNCH PillBox Exercise
+                            </button>
+                            <button type="button"
+                                id="add-meds"
+                                autocomplete="off">
+                                &#10010; Add Medications
+                            </button>
+                        </p>
+                    </div>
+                </div>
+                <% if (!process.env.BUILD_FOR_DUKE) { %><div class="tab-panel" data-id="report">
+                    <p class="text-center">Please wait...</p>
+                </div><% } %>
+            </div>
+            <br>
+            <hr>
+            <p>
+                <small class="pull-right">
+                    <a href="#" id="open-translator">Translate pillbox app</a>
+                </small>
+                <small class="pull-left text-muted">
+                    &copy; Duke University 2015&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    Developed by <a href="http://medapptech.com" target="_blank">MedAppTech</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    v<%-pkg.version%>.beta
+                </small>
+            </p>
+            <br clear="all">
+
+            <div id="result" style="display:none" class="modal kbd">
+                <div id="qrlen"></div>
+                <b>Scan this QR code to launch the PillBox exercise</b>
+                <a target="_blank" href="#" class="qrcode" id="qrcode"></a>
+            </div>
+
+            <div id="replay" style="display:none" class="modal kbd">
+                <a class="btn btn-danger close-modal-btn" href="#" title="Close"></a>
+                <b style="color:#090;margin-top:6px" class="title"></b>
+                <iframe width="1066" height="600"></iframe>
+            </div>
+            <div id="translation-manager" style="display:none" class="modal kbd">
+                <iframe width="1066" height="600"></iframe>
+            </div>
+        </div>
+
+        <script src="js/libs.js?v=<%-pkg.version%>"></script>
+        <script src="js/fhir-client.min.js?v=<%-pkg.version%>"></script>
+        <script src="js/main.js?v=<%-pkg.version%>"></script>
+        <script type="text/javascript">
+        $(function() { new App(); });
+        </script>
+    </body>
+</html>

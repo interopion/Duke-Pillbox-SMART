@@ -1,0 +1,112 @@
+.step-input {
+    position       : relative;
+    vertical-align : middle;
+    display        : inline-block;
+    max-width      : 100%;
+
+    > input {
+        margin    : 0;
+        text-align: inherit;
+        display   : block;
+        padding-right: 2.8ex;
+    }
+
+    .btn-up, .btn-down {
+        position     : absolute;
+        z-index      : 2;
+        right        : 0;
+        width        : 2.4ex;
+        background   : #DDD;
+        cursor       : pointer;
+        margin-right : 2px;
+        outline      : none;
+        box-shadow   : 0 0 2px -1px #000 inset, 0 11px 10px -5px rgba(255, 255, 255, 0.4) inset;
+        opacity      : 0.5;
+        .border-box;
+        .unselectable;
+
+        &:hover {
+            background: #FFF;
+            box-shadow: inset 0 0px 1px 0px #000, 0 -10px 5px -3px rgba(155, 155, 155, 0.21) inset;
+        }
+
+        &:active {
+            background: #CCC;
+            box-shadow: inset 0 0 1px 0px #000, 3px 5px 5px -3px #AAA inset;
+        }
+
+        &:after {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            margin-left: -0.5ex;
+            margin-top: -0.4ex;
+            border-width: 0.8ex 0.5ex;
+            border-style: solid inset;
+            border-color: #555 transparent;
+            color: #666;
+            content: "";
+        }
+    }
+
+    .btn-up {
+        top: 2px;
+        bottom: 51%;
+        border-radius: 0 2px 0 0;
+        &:after {
+            border-top-width: 0;
+        }
+        .max & {
+            opacity: 0.5;
+        }
+    }
+
+    .btn-down {
+        top: 51%;
+        bottom: 2px;
+        border-radius: 0 0 2px 0;
+        &:after {
+            border-bottom-width: 0;
+        }
+    }
+
+    &.min .btn-down,
+    &.max .btn-up,
+    &.disabled .btn-down,
+    &.disabled .btn-up,
+    .disabled & .btn-down,
+    .disabled & .btn-up {
+        &:after {
+            border-color: #CCC transparent;
+            cursor: not-allowed, default;
+            color: #CCC;
+        }
+
+        background: #F0F0F0 !important;
+        box-shadow: inset 0 0px 1px 0px #ddd !important;
+        cursor: default;
+        border-color: transparent;
+    }
+
+    &.disabled, .disabled & {
+        pointer-events: none;
+        .btn-up, .btn-down {
+            background: #EEE !important;
+            text-shadow: 0 1px 0 #FFF;
+            cursor: not-allowed, default;
+        }
+        input {
+            background: transparent;
+            opacity: 0.3;
+            pointer-events: none;
+        }
+    }
+
+    &:hover {
+        .btn-up, .btn-down {
+            opacity: 1;
+        }
+    }
+}

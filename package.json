@@ -1,0 +1,33 @@
+{
+  "name": "duke-pillbox",
+  "version": "2.5.5",
+  "description": "Duke Pillbox",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start:desktop": "node_modules/http-server/bin/http-server build -p 8000 -c-1",
+    "start:mobile": "node_modules/http-server/bin/http-server build/mobile_app -p 8090 -c-1",
+    "start:backend": "cd backend && node ."
+  },
+  "author": "MedAppTech",
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/medapptech/pillbox.git"
+  },
+  "bugs": {
+    "url": "https://github.com/medapptech/pillbox/issues"
+  },
+  "devDependencies": {
+    "grunt": "~0.4.5",
+    "grunt-browserify": "^3.5.0",
+    "grunt-contrib-concat": "~0.5.1",
+    "grunt-contrib-copy": "~0.8.0",
+    "grunt-contrib-jshint": "~0.11.0",
+    "grunt-contrib-less": "~1.0.0",
+    "grunt-contrib-uglify": "^0.8.0",
+    "grunt-contrib-watch": "~0.6.1",
+    "http-server": "^0.9.0",
+    "jshint-stylish": "~1.0.1"
+  }
+}
