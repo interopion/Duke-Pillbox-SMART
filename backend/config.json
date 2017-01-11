@@ -1,0 +1,9 @@
+{
+    "port"             : 3001,
+    "languagesPath"    : "./languages.json",
+    "translationsPath" : "./translations.json",
+    "dataDir"          : "./records",
+    "backupsDir"       : "./backups",
+    "username"         : "pillboxadmin",
+    "password"         : "N_zyBCwV2P8-qyUnBa8E"
+}

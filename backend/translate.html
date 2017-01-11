@@ -1,0 +1,1327 @@
+<!DOCTYPE html>
+<html class="loading">
+    <head>
+        <meta charset="utf-8">
+        <title>Duke Pillbox Translations Manager</title>
+        <style>
+            html {
+                height: 100%;
+            }
+            body {
+                background: #DDD;
+                position: relative;
+                margin: 0;
+                padding: 0;
+                overflow: hidden;
+                height: 100%;
+                min-width: 720px;
+            }
+            body, input, select, button {
+                font:menu;
+            }
+
+            body * {
+                -webkit-box-sizing: border-box;
+                   -moz-box-sizing: border-box;
+                        box-sizing: border-box;
+            }
+            ::-moz-selection{
+                background: #0069D9;
+                color: #FFF;
+            }
+            ::selection {
+                background: #0069D9;
+                color: #FFF;
+            }
+
+            .loadable {
+                position: relative;
+                min-height: 50px;
+            }
+            .loadable:before, .loadable:after {
+                display: block;
+                position: absolute;
+                opacity: 0;
+                transform: scale(0);
+                transform-origin: 50% 0;
+            }
+            .loadable:before {
+                content: "";
+                z-index: 100;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: none repeat scroll 0 0 rgba(0, 0, 0, 0.05);
+                margin: 0;
+                border-radius: 5px;
+                transition: opacity 0.2s ease, transform 0.4s ease;
+            }
+            .loadable:after {
+                content: "Loading...";
+                z-index: 101;
+                top: 50%;
+                left: 50%;
+                width: 100px;
+                height: 40px;
+                text-align: center;
+                margin: -20px auto auto -50px;
+                line-height: 40px;
+                font-weight: bold;
+                background: #fff;
+                border-radius: 40px;
+                border: 3px solid rgba(0, 0, 0, 0.2);
+                transition: opacity 0.6s ease 0.4s, transform 0.4s ease;
+            }
+            html.loading .loadable:after,
+            html.loading .loadable:before {
+                opacity: 1;
+                -webkit-transform: scale(1);
+                transform: scale(1);
+                transition: all 0.3s;
+            }
+            html.loaded .loadable:after {
+                opacity: 0;
+                -webkit-transform: scale(0);
+                transform: scale(0);
+                transition: none;
+            }
+            html.loaded .loadable:before {
+                opacity: 0;
+                -webkit-transform: scale(0);
+                transform: scale(0);
+                transition: all 0.6s ease;
+            }
+
+            h1 {
+                margin: 4px 8px;
+                font-weight: 300;
+                color: #2B556B;
+            }
+
+            #string-list {
+                width: 296px;
+                position: absolute;
+                top: 8px;
+                right: auto;
+                bottom: 8px;
+                left: 8px;
+                border: 1px solid #BBB;
+                padding: 1px;
+                overflow: auto;
+                background: #FFF;
+            }
+
+            #string-list:focus {
+                border-color: #0069D9;
+                outline: none;
+            }
+
+            #toolbar {
+                background: #EEE;
+                border: 1px solid #BBB;
+                box-shadow: 0 -4px 2px -4px rgba(0, 0, 0, 0.1) inset, 0 1px 1px 0 #FFF inset;
+                height: 30px;
+                left: 312px;
+                position: absolute;
+                right: 8px;
+                top: 8px;
+                padding: 2px 4px 3px 149px;
+            }
+            #toolbar button {
+                font-weight: bold;
+                background-color: #EEE;
+                font-size: 16px;
+                vertical-align: top;
+                width: 25px;
+                border: 1px solid #CCC;
+                border-radius: 4px;
+                height: 25px;
+                float: left;
+                margin-right: 2px;
+                box-shadow: 0 -4px 2px -4px rgba(0, 0, 0, 0.1) inset, 0 1px 1px 0 #FFF inset;
+            }
+            #toolbar button.active {
+                background-color: #FFF;
+                border: 1px solid #0069D9;
+            }
+            #editor-list {
+                border  : 1px solid #BBB;
+                overflow: auto;
+                position: absolute;
+                top     : 37px;
+                right   : 8px;
+                bottom  : 8px;
+                left    : 312px;
+                padding : 0.5px 0 0;
+            }
+            #editor-list table {
+                width: 100%;
+                border-collapse: collapse;
+            }
+            #editor-list td {
+                border-bottom: 1px solid #CCC;
+                padding: 4px;
+                width : 150px;
+            }
+            #editor-list td + td {
+                border-left: 1px solid #CCC;
+                width : auto;
+                padding: 0;
+            }
+            #editor-list td + td div {
+                padding: 4px;
+                outline-offset: 0px;
+                margin-right: 1px;
+                font-size: 16px;
+                min-height: 26px;
+            }
+            #editor-list div:focus {
+                outline: 1px solid #0069D9;
+                position: relative;
+                z-index: 200;
+                background: #FFF;
+            }
+
+            #editor-list div.danger, #editor-list div.danger:focus {
+                outline: 1px solid #B00;
+                background: #FCB;
+            }
+            #editor-list div.danger:before {
+                content: "The en-US translation cannot be empty";
+                color: #9B0000;
+                position: absolute;
+                font-weight: 100;
+                font-size: 12px;
+                line-height: 0;
+                top: 14px;
+                text-shadow: 0 0 1px #FFF;
+            }
+
+            #string-list div {
+                padding: 2px 4px;
+                cursor: default;
+            }
+            #string-list div:hover {
+                background: #EEE;
+            }
+            #string-list div.active {
+                background: #0069D9;
+                color: #FFF;
+            }
+            #string-list span {
+                opacity: 0.7;
+            }
+            #save, #cancel {
+                position: absolute;
+                bottom  : 12px;
+                right   : 8px;
+                height  : 28px;
+                width   : 140px;
+                border  : 1px solid rgba(0, 0, 0, 0.5);
+                line-height: normal;
+                font-size: 120%;
+                text-align: center;
+                text-shadow: 0 1px 0 #FFF;
+                border-radius: 3px;
+                box-shadow: 0 -13px 10px 0px rgba(0, 0, 0, 0.04) inset,
+                            0 -10px 10px -8px rgba(0, 0, 0, 0.10) inset,
+                            0 0px 0px 1px #FFF inset,
+                            0 1px 1px 0 #fff;
+                background: #EEE;
+                cursor: default;
+                -webkit-user-select: none;
+                   -moz-user-select: none;
+                        user-select: none;
+                font-weight: 400;
+            }
+            #cancel {
+                right: 156px;
+            }
+            #save:hover, #cancel:hover {
+                background: #FFF;
+            }
+            #save:active, #cancel:active {
+                background: #CCC;
+                box-shadow: 0 -13px 10px 0px rgba(0, 0, 0, 0.04) inset,
+                            0 -10px 10px -8px rgba(0, 0, 0, 0.10) inset,
+                            0px 1px 5px 1px #999 inset,
+                            0 1px 1px 0 #fff;
+            }
+
+            #save:disabled, #cancel:disabled {
+                background    : none repeat scroll 0 0 #e7e7e7;
+                border-color  : rgba(0, 0, 0, 0.1);
+                box-shadow    : 0 0 1px 0 #fff inset;
+                color         : #aaa;
+                pointer-events: none;
+                text-shadow   : 0 1px 0 #fff;
+            }
+
+            .tabs {
+                position: absolute;
+                top: 3px;
+                left: 8px;
+                right: 8px;
+                bottom: 48px;
+            }
+            .tabs .tab {
+                display: block;
+                float  : right;
+                padding: 8px 32px;
+                margin : 0 0 0 2px;
+                border : 1px solid #CCC;
+                border-bottom: none;
+                background: #EEE;
+                color: #666;
+                border-radius: 4px 4px 0 0;
+                cursor: pointer;
+                position: relative;
+                text-decoration: none;
+            }
+            .tabs .tab:focus,
+            .tabs .tab:active {
+                outline: 1px dotted rgba(0, 0, 0, 0.3) !important;
+                outline-offset: -8px; 
+            }
+            .tabs .tab.active {
+                padding: 8px 32px 9px;
+                margin-bottom: -1px;
+                background: #FFF;
+                border-color: #BBB;
+                color: #000;
+                z-index: 2;
+                box-shadow: 0 0 3px 1px rgba(255, 255, 255, 0.7) inset, 0 18px 0 -15px orange inset;
+            }
+            .tabs .tab-panel {
+                clear: both;
+                display: none;
+                position: absolute;
+                top: 33px;
+                right: 0;
+                bottom: 0;
+                left: 0;
+                border: 1px solid #BBB;
+                background: linear-gradient(#FFF, #EEE) #EEE;
+                padding: 8px;
+                box-shadow: 0 2px 3px -3px #AAA;
+                overflow: auto;
+            }
+
+            .tabs .tab-panel.active {
+                display: block;
+            }
+
+            .tabs:after {
+                content : "";
+                display: block;
+                clear: both;
+            }
+
+            #lang-table {
+                width: 100%;
+                border-spacing: 0;
+                border-collapse: collapse;
+                border: 1px solid #BBB;
+                background: #DDD;
+            }
+            #lang-table th {
+                background: #EEE;
+                padding: 4px 2px;
+                text-shadow: 0 1px 0 #FFF;
+                color: #333;
+                box-shadow: 0 2px 1px -1px #fff inset, 0 -5px 15px -15px #999 inset;
+            }
+            #lang-table td {
+                padding: 0;
+                vertical-align: middle;
+                text-align: left;
+                background: rgba(255, 255, 255, 0.9);
+                color: #666;
+            }
+            #lang-table td:first-child {
+                text-align: center;
+            }
+            #lang-table td div {
+                padding: 0 4px;
+            }
+            #lang-table td, #lang-table th {
+                border: 1px solid #DDD;
+            }
+            #lang-table tbody tr:hover {
+                background-color: #0069D9;
+            }
+            #lang-table input[type="text"], #lang-table select {
+                width: 100%;
+                margin: 0;
+                height: 26px;
+                text-align: left;
+                border: none;
+                padding: 0 4px;
+                background: transparent;
+                border-radius: 0;
+                color: #000;
+                position: relative;
+                -webkit-appearance: none;
+            }
+            #lang-table input[type="text"]:focus, #lang-table select:focus {
+                outline: 1px solid #0069D9;
+                outline-offset: 0;
+
+                z-index: 2;
+            }
+            #lang-table input.has-error, #lang-table select.has-error {
+                outline: 1px solid #A00 !important;
+            }
+            #lang-table tbody tr.has-error {
+                background: red;
+            }
+            #lang-table .tooltip {
+                background: none repeat scroll 0 0 #900;
+                border-radius: 5px;
+                bottom: 4px;
+                color: #fff;
+                padding: 2px 8px;
+                position: absolute;
+                text-align: center;
+                left: 50%;
+                z-index: 3;
+                white-space: nowrap;
+            }
+            #lang-table .tooltip:after {
+                content : "";
+                position: absolute;
+                bottom  : -6px;
+                left    : 50%;
+                width   : 0;
+                height  : 0;
+                border-width: 6px 6px 0;
+                border-style: solid inset none;
+                border-color: #900 transparent transparent;
+                margin-left : -3px;
+            }
+        </style>
+    </head>
+    <body class="loadable">
+        <h1><span style="opacity:0.6">Duke Pillbox </span>Translations Manager</h1>
+        <div class="tabs">
+            <a class="tab"        href="#" data-id="languages"    >Languages</a>
+            <a class="tab active" href="#" data-id="translations" >Translations</a>
+
+            <div class="tab-panel active" data-id="translations">
+                <div id="string-list" tabindex="2"></div>
+                <div id="editor-list"></div>
+                <div id="toolbar">
+                    <button disabled data-cmd="bold">B</button>
+                    <button disabled data-cmd="italic"><i>I</i></button>
+                    <button disabled data-cmd="underline"><u>U</u></button>
+                </div>
+            </div>
+            <div class="tab-panel" data-id="languages">
+                <div style="margin:0 2px 10px">
+                    <a href="#addLanguage" style="color:#090">Add New Language</a>
+                </div>
+                <table id="lang-table">
+                    <thead>
+                        <tr>
+                            <th width="26"></th>
+                            <th>Name</th>
+                            <th>Name - native</th>
+                            <th>Abbr</th>
+                            <th>Enabled</th>
+                            <th>Inherits from</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+                <p>
+                    <button type="button" class="delete-langs">&nbsp;↳ <span style="color:#e81111">Delete Selected</span></button>
+                </p>
+            </div>
+        </div>
+        <button id="cancel">Close</button>
+        <button id="save">Save</button>
+        <script src="libs.js"></script>
+        <script type="text/template" title="languageRow">
+            <td>
+                <% if (data.langAbbr) { %>
+                    <input type="checkbox"
+                    <%-(data.langAbbr=='en-US' ? ' disabled' : '')%>
+                    value="<%-data.langAbbr%>">
+                <% } %>
+            </td>
+            <td>
+                <input  type="text"
+                        placeholder="Language name in english"
+                        value="<%-data.language%>"
+                        name="language"
+                        required>
+            </td>
+            <td>
+                <input  type="text"
+                        placeholder="Native language name"
+                        value="<%-data.nativeName%>"
+                        name="nativeName">
+            </td>
+            <td>
+                <% if (data.langAbbr) { %>
+                    <div><%-data.langAbbr%></div>
+                <% } else { %>
+                    <input  type="text"
+                            placeholder="Language abbreviation"
+                            value="<%-data.langAbbr%>"
+                            <%-(data.langAbbr=="en-US" ? ' readonly' : '')%>
+                            name="langAbbr"
+                            required>
+                <% } %>
+            </td>
+            <td style="text-align:center">
+                <input  type="checkbox"
+                        name="enabled"
+                        <%-data.enabled ? ' checked' : ''%>
+                        <%-data.langAbbr=="en-US" ? ' disabled' : ''%>>
+            </td>
+            <td>
+                <% if (data.langAbbr == "en-US") { %>
+                    <div>N/A</div>
+                <% } else { %>
+                    <select name="failback" required>
+                        <% LANGUAGES.each(function(locale) { %>
+                            <option value="<%-locale.id%>"
+                            <%-(data.langAbbr && data.langAbbr === locale.id ? ' disabled' : '')%>
+                            ><%-locale.get("language")%></option>
+                        <% }); %>
+                    </select>
+                <% } %>
+            </td>
+        </script>
+        <script>
+
+        var CFG = {};
+
+        /**
+         * Collects all the template from within the given container. The templates
+         * should be in script tags having a title attribute and the type attribute
+         * set to "text/template".
+         * @param {DOMElement|Jquery|CSS Selector} container Defaults to the
+         *     entire document
+         * @returns {Object} All the template source strings by title
+         */
+        function collectTemplates(container) {
+            var out = {};
+            $(container || document)
+            .find('script[type="text/template"][title]')
+            .each(function(i, s) {
+                out[s.title] = _.template($.trim($(s).text()), { variable: "data" });
+            });
+            return out;
+        }
+
+        function scrollIntoViewIfNeeded(el) {
+            var prt    = $(el).parent()[0],
+                top    = el.offsetTop,
+                sTop   = prt.scrollTop,
+                hAvail = prt.clientHeight,
+                hEl    = el.offsetHeight;
+            
+            if (top + hEl > hAvail + sTop) {
+                $(prt).scrollTop(top + hEl - hAvail);
+            } else if (top - sTop < 0) {
+                $(prt).scrollTop(top - 2);
+            }
+        }
+
+        function jPath(obj, path, value) {
+
+            var cur = obj,
+
+                /**
+                 * If this function has been called to set, get or delete a property
+                 * @type {String}
+                 */
+                mode = arguments.length == 2 ? "get" : value === undefined ? "delete" : "set",
+
+                /**
+                 * The RegExp used to parse the paths
+                 * @type {RegExp}
+                 */
+                reg = new RegExp("\\[['\"]?([^\\]]+)['\"]?\\]", "g"),
+
+                /**
+                 * The path exploded to segments
+                 * @type {Array}
+                 */
+                segments = path.replace(reg, ".$1").split("."),
+
+                /**
+                 * The length of the path segments
+                 * @type {Number}
+                 */
+                l = segments.length,
+
+                /**
+                 * The path that we are currently in as an array of path segments.
+                 * @type {Array}
+                 */
+                curPath = [],
+
+                name, i;
+
+            for ( i = 0; i < l; i++ ) {
+
+                curPath[i] = name = segments[i];
+
+                if (cur instanceof Array) {
+                    name = parseInt(name, 10);
+                }
+
+                if ( i == l - 1 ) { // last
+                    if (mode == "get") {
+                        return cur[name];
+                    }
+
+                    if (mode == "delete") {
+                        delete cur[name];
+                        return;
+                    }
+
+                    cur[name] = value;
+                    return;
+                }
+
+                if (!(cur.hasOwnProperty(name))) {
+                    if (mode == "set") {
+                        cur[name] = name.match(/\s*[0-9]+\s*/) ? [] : {};
+                    } else {
+                        return;
+                    }
+                }
+
+                cur = cur[name];
+            }
+        }
+
+        function getConfig(url, cb) {
+            $.ajax({
+                url      : url,
+                dataType : "xml",
+                cache    : false
+            }).then(
+                function(xmlDoc) {
+                    var out = {};
+                    $("option", xmlDoc).each(function(i, option) {
+                        var name  = option.getAttribute("name"),
+                            type  = option.getAttribute("type"),
+                            value = option.textContent;
+
+                        switch (type) {
+                            case "string":
+                                value = value || "";
+                                break;
+                            case "boolean":
+                                value = value.toLowerCase() == "true";
+                                break;
+                            case "number":
+                                value = parseFloat(value || 0);
+                                break;
+                            default:
+                                return cb(new Error(
+                                    "Invalid configuration - invalid or missing option@type"
+                                ));
+                        }
+                        out[name] = value;
+                    });
+
+                    cb(null, out);
+                },
+                function() {
+                    cb("Error loading config file");
+                }
+            );
+        }
+
+        $(document).ajaxStart(function() {
+            $("html").addClass("loading");
+            setTimeout(function() {
+                $("html").removeClass("loaded");
+            }, 0);
+        });
+
+        $(document).ajaxStop(function() {
+            $("html").removeClass("loading");
+            setTimeout(function() {
+                $("html").addClass("loaded");
+            }, 0);
+        });
+
+        var templates = collectTemplates();
+
+        // Models --------------------------------------------------------------
+        var LanguageModel = Backbone.Model.extend({
+            idAttribute : "langAbbr",
+            defaults : {
+                language   : "",
+                langAbbr   : "",
+                dir        : "ltr",
+                failback   : "en-US",
+                enabled    : true,
+                nativeName : ""
+            },
+            validate : function(data) {
+                var out = {};
+
+                if (!data.language) {
+                    out.language = "Language name is required";
+                }
+
+                if (!data.langAbbr) {
+                    out.langAbbr = "Language abbreviation is required";
+                }
+
+                if (LANGUAGES.where({ language : data.language }).length > 1) {
+                    out.language = "Language name must be unique";
+                }
+
+                if (LANGUAGES.where({ langAbbr : data.langAbbr }).length > 1) {
+                    out.langAbbr = "Language abbreviation must be unique";
+                }
+
+                return $.isEmptyObject(out) ? undefined : out;
+            },
+            parse : function(data) {
+                return $.extend({}, this.defaults, data);
+            }
+        });
+
+        var TranslationModel = Backbone.Model.extend({
+            idAttribute : "path",
+            defaults : {
+                path : null,
+                value: {}
+            },
+            validate : function(data) {
+                if (!data || !data.value) {
+                    return "Translation cannot be empty";
+                }
+                var us = $.trim(String(data.value["en-US"] || ""));
+                if (!us) {
+                    return "Translation for 'en-US' is required";
+                }
+                return undefined;
+            }
+        });
+
+        // Collections ---------------------------------------------------------
+        var LanguageCollection = Backbone.Collection.extend({
+            model : LanguageModel,
+            
+            parse : function(data) {
+                return _.map(data, this.model.parse);
+            }
+        });
+
+        var TranslationsCollection = Backbone.Collection.extend({
+            model : TranslationModel,
+
+            parse : function(data) {
+                var out = [];
+
+                function loop(src, path) {
+                    path = path || [];
+                    $.each(src, function(key, value) {
+                        if (value && typeof value == "object") {
+                            loop(value, path.concat([key]));
+                        } else {
+                            out.push({
+                                path : path.join("."),
+                                value: src
+                            });
+                            return false;
+                        }
+                    });
+                }
+
+                loop(data);
+
+                return out;
+            },
+
+            toJSON : function(asTree) {
+                if (!asTree) {
+                    return Backbone.Collection.prototype.toJSON.call(this);
+                }
+
+                var out = {};
+                _.each(this.models, function(model) {
+                    jPath(out, model.id, model.get("value"));
+                });
+                return out;
+            }
+        });
+
+        // Collection Instances ------------------------------------------------
+        var LANGUAGES = new LanguageCollection();
+        var STRINGS   = new TranslationsCollection();
+
+        // The nested JSON translations structure
+        //var TRANSLATIONS = {};
+
+        // The initial state structure
+        var SERVER_MODEL = {};
+
+        // Views ---------------------------------------------------------------
+
+        /**
+         * Represents a single row in the languages table
+         */
+        var LanguageView = Backbone.View.extend({
+            tagName : "tr",
+
+            events : {
+                'change input[name]' : "userSetAttribute",
+                'input  input[name]' : "userSetAttribute",
+                'change select[name]': "userSetAttribute"
+            },
+
+            render : function() {
+                this.$el.html(templates.languageRow(this.model.toJSON()));
+                return this;
+            },
+
+            userSetAttribute : function(e) {
+                this.model.set(
+                    e.target.name,
+                    $(e.target).is(":checkbox") ? 
+                        !!e.target.checked :
+                        $(e.target).val()
+                );
+            }
+        });
+
+        var LanguagesPanel = Backbone.View.extend({
+
+            events : {
+                'click a[href="#addLanguage"]' : "userAddLanguage",
+                'click .delete-langs'          : "userDeleteSelected"
+            },
+
+            initialize : function() {
+                this._tbody = this.$el.find("tbody");
+                this.listenTo(LANGUAGES, "add"   , this.addLanguage   );
+                this.listenTo(LANGUAGES, "remove", this.removeLanguage);
+                this.listenTo(LANGUAGES, "reset" , this.render        );
+                this.listenTo(LANGUAGES, "change", this.validate      );
+            },
+
+            render : function() {
+                this._tbody.empty();
+                LANGUAGES.each(this.addLanguage, this);
+                return this;
+            },
+
+            addLanguage : function(model) {
+                var view = new LanguageView({ model : model }).render();
+                this._tbody.append(view.el);
+            },
+
+            removeLanguage : function(model) {
+                this._tbody.find('input:checkbox[value="' + model.id + '"]')
+                .closest("tr").remove();
+            },
+
+            userAddLanguage : function(e) {
+                e.preventDefault();
+                LANGUAGES.add({ langAbbr : "" });
+                this._tbody.find('tr:last input[type="text"]:first').trigger("mouseover").trigger("focus");
+            },
+
+            userDeleteSelected : function(e) {
+                e.preventDefault();
+                $.each(this._tbody.find('input:checkbox:checked'), function(i, cb) {
+                    var model = LANGUAGES.get(cb.value);
+                    if (model) {
+                        LANGUAGES.remove(model);
+                    }
+                });
+            },
+
+            validate : function() {
+                var hasError = false,
+                    errors = LANGUAGES.map(function(lang) {
+                        return lang.validate(lang.attributes);
+                    });
+
+                this.$el.find("tbody tr").each(function(rowIndex, tr) {
+                    var $tr  = $(tr),
+                        rowErrors = errors[rowIndex];
+
+                    if (!rowErrors) {
+                        $tr.removeClass("has-error").find("input").removeClass("has-error");
+                        $tr.find(".tooltip").each(function(i, tt) {
+                            $(tt).parent().remove();
+                        });
+                    } else {
+                        hasError = true;
+
+                        $tr.find('input[name], select[name]').each(function(i, input) {
+                            var error = rowErrors[input.name];
+                            if (!error) {
+                                $(input).removeClass("has-error").parent()
+                                .find(".tooltip").each(function(i, tt) {
+                                    $(tt).parent().remove();
+                                });
+                            } else {
+                                var td = $(input).addClass("has-error").parent();
+                                var tt = td.find(".tooltip");
+
+                                if (!tt.length) {
+                                    tt = $('<div style="position:relative;padding:0 1px"><div class="tooltip"/></div>')
+                                        .prependTo(td).find(".tooltip");
+                                }
+
+                                tt.css("visibility", "hidden").text(error);
+
+                                setTimeout(function() {
+                                    tt.css({
+                                        marginLeft : -tt.outerWidth() / 2,
+                                        visibility : "visible"
+                                    });
+                                }, 0);
+                            }
+                        });
+                    }
+                });
+
+                return !hasError;
+            }
+        });
+
+        var StringsList = Backbone.View.extend({
+
+            events : {
+                "click > div" : "onItemClick",
+                "keydown"     : "onKeyDown"
+            },
+
+            initialize : function() {
+                this.listenTo(STRINGS, "reset", this.render);
+            },
+            
+            render : function() {
+                this.$el.empty();
+                STRINGS.each(this.addOne, this);
+                return this;
+            },
+
+            addOne : function(model) {
+                var idx = model.id.lastIndexOf(".");
+                $('<div/>').html(
+                    idx > 0 ?
+                        '<span>' + model.id.substr(0, idx + 1) + '</span>' +
+                        '<b>' + model.id.substr(idx + 1) + '</b>' : 
+                        '<b>' + model.id + '</b>'
+                )
+                .data("model", model)
+                //.data("string", model)
+                .appendTo(this.$el);
+            },
+
+            selectItemByPath : function(path) {
+                STRINGS.each(function(model, index) {
+                    if (model.id == path) {
+                        this.selectItem(this.$el.find("div:eq(" + index + ")"));
+                    }
+                }, this);
+            },
+
+            selectItem : function($div) {
+                $div.addClass("active").siblings().removeClass("active");
+                App.renderTranslators($div.data("model"));
+                this.selectedItem = $div;
+                this.selectedPath = $div.data("model").id;
+                scrollIntoViewIfNeeded($div[0]);
+            },
+
+            selectNextItem : function() {
+                var cur = this.selectedItem, next;
+                if (!cur || !cur.length) {
+                    next = this.$el.find("> div:first");
+                } else {
+                    next = this.selectedItem.next("div");
+                    if (!next.length) {
+                        next = this.$el.find("> div:first");
+                    }
+                }
+                if (next.length) {
+                    this.selectItem(next);
+                }
+            },
+
+            selectPreviousItem : function() {
+                var cur = this.selectedItem, prev;
+                if (!cur || !cur.length) {
+                    prev = this.$el.find("> div:last");
+                } else {
+                    prev = this.selectedItem.prev("div");
+                    if (!prev.length) {
+                        prev = this.$el.find("> div:last");
+                    }
+                }
+                if (prev.length) {
+                    this.selectItem(prev);
+                }
+            },
+
+            onItemClick : function(e) {
+                this.selectItem($(e.target).closest("div"));
+            },
+
+            onKeyDown : function(e) {
+                switch(e.keyCode) {
+                    case 38: // up
+                        this.selectPreviousItem();
+                    return false;
+                    case 40: // down
+                        this.selectNextItem();
+                    return false;
+                }
+            }
+        });
+
+        var EditorList = Backbone.View.extend({
+
+            initialize : function() {
+                this.model = null;
+
+                $(document)
+                .on(
+                    "selectionchanged",
+                    _.bind(this.updateCommands, this)
+                )
+                .on(
+                    "mousedown",
+                    "#toolbar button[data-cmd]",
+                    _.bind(this.execCommand, this)
+                )
+                .on(
+                    "DOMSubtreeModified input change propertychange paste", 
+                    "[contenteditable][lang]", 
+                    _.bind(this.onChange, this)
+                );
+
+                this.updateCommands(null, {});
+
+                // Provide "selectionchanged" event
+                (function() {
+                    var selection = window.getSelection(),
+                        state = {},
+                        $doc = $(document),
+                        isMouseDown;
+
+                    function checkSelection() {
+                        var cur, rng, changed;
+
+                        cur = selection.rangeCount;
+                        if (cur !== state.rangeCount) {
+                            state.rangeCount = cur;
+                            changed = true;
+                        }
+
+                        cur = selection.isCollapsed;
+                        if (cur !== state.isCollapsed) {
+                            state.isCollapsed = cur;
+                            changed = true;
+                        }
+
+                        if (state.rangeCount > 0) {
+                            rng = selection.getRangeAt(0);
+                        } else {
+                            rng = document.createRange();
+                        }
+
+                        cur = rng.commonAncestorContainer;
+                        if (cur !== state.commonAncestorContainer) {
+                            state.commonAncestorContainer  = cur;
+                            changed = true;
+                        }
+
+                        cur = rng.endContainer;
+                        if (cur !== state.endContainer) {
+                            state.endContainer = cur;
+                            changed = true;
+                        }
+
+                        cur = rng.endOffset;
+                        if (cur !== state.endOffset) {
+                            state.endOffset = cur;
+                            changed = true;
+                        }
+
+                        cur = rng.startContainer;
+                        if (cur !== state.startContainer) {
+                            state.startContainer = cur;
+                            changed = true;
+                        }
+
+                        cur = rng.startOffset;
+                        if (cur !== state.startOffset) {
+                            state.startOffset = cur;
+                            changed = true;
+                        }
+
+                        if (changed && state.rangeCount) {
+                            $doc.trigger("selectionchanged", state);
+                        }
+                    }
+
+                    $(function() {
+                        $doc.on(
+                            "mousedown mouseup mousemove keyup keypress paste input change command",
+                            function(e) {
+                                if (e.type == "mousedown") {
+                                    isMouseDown = true;
+                                } else if (e.type == "mouseup") {
+                                    isMouseDown = false;
+                                } else if (e.type == "mousemove" && !isMouseDown) {
+                                    return true;
+                                }
+                                setTimeout(checkSelection, 0);
+                            }
+                        );
+                    });
+                })();
+            },
+
+            onChange : function(e) {
+                var tgt  = $(e.target),
+                    lang = tgt.attr("lang");
+
+                if (lang && this.model) {
+                    var _val = this.model.get("value"),
+                        _new = $.trim(
+                            tgt.html().replace(/(\r|\n)/g, "").replace(/<br\s?\/?>$/, "")
+                        ).replace(/^(&nbsp;|\s)+$/, ""),
+                        _txt = $.trim(tgt.text());
+
+                    if (!_txt && lang == "en-US") {
+                        tgt.addClass("danger");
+                        Backbone.trigger("translationserror");
+                        return;
+                    }
+
+                    tgt.removeClass("danger");
+
+                    _val[lang] = _new;
+                    this.model.set("value", _val);
+                    this.model.trigger("change");
+                }
+            },
+
+            setData : function(model) {
+                this.model = model;
+                this.render();
+            },
+
+            render : function() {
+                var html = ['<table>'], data = this.model.get("value");
+                LANGUAGES.each(function(lang) {
+                    html.push(
+                        '<tr>',
+                            '<td>',
+                                lang.get("language"),
+                                lang.id == "en-US" ?
+                                    '<span style="color:red"> (required)</span>' :
+                                    "",
+                            '</td>',
+                            '<td>',
+                                '<div contenteditable="true" lang="' + lang.id + '">',
+                                    data[lang.id] || "",
+                                '</div>',
+                            '</td>',
+                        '</tr>'
+                    );
+                }, this);
+                html.push('</table>');
+
+                this.$el.html(html.join(""));
+                return this;
+            },
+
+            updateCommands : function(e, state) {
+                var editor   = $(state.commonAncestorContainer).closest("[contenteditable]"),
+                    editable = editor.length > 0;
+
+                if (editable) {
+                    editor.trigger("focus");
+                }
+
+                setTimeout(function() {
+                    _.each(["bold", "italic", "underline"], function(cmd) {
+                        var enabled = editable && document.queryCommandEnabled(cmd),
+                            active  = enabled && document.queryCommandState(cmd);
+                        $('#toolbar button[data-cmd="' + cmd + '"]')
+                            .prop("disabled", !enabled)
+                            .toggleClass("active", active);
+                    });
+                }, 0);
+            },
+
+            execCommand : function(e) {
+                var btn = $(e.target).closest("button[data-cmd]"),
+                    cmd = btn.attr("data-cmd");
+                e.preventDefault();
+                document.execCommand(cmd);
+            }
+        });
+
+        var MainView = Backbone.View.extend({
+
+            events : {
+                "click .tabs > .tab" : "onTabClick",
+                "click #save"        : "save",
+                "click #cancel"      : "close"
+            },
+
+            initialize : function() {
+                this.listenTo(STRINGS  , "change add remove", _.bind(this.onDataChange, this));
+                this.listenTo(LANGUAGES, "change add remove", _.bind(this.onDataChange, this));
+                this.listenTo(Backbone, "translationserror", function() {
+                    $("#save").prop("disabled", true);
+                });
+
+                this.$el.find("#save").prop("disabled", true);
+                this.$el.find(".tabs > .tab.active").trigger("click", true);
+            },
+
+            onTabClick : function(e, force) {
+                var $tab = $(e.target).closest(".tab"), id;
+
+                if (!force && $tab.is(".active")) {
+                    return false;
+                }
+
+                $tab.addClass("active").siblings(".tab").removeClass("active");
+
+                id = $tab.attr("data-id");
+                if (id) {
+                    $tab.closest(".tabs").find(".tab-panel").each(function(i, o) {
+                        var $o = $(o),
+                            isActive = $o.is(".active");
+                        if ($o.attr("data-id") == id) {
+                            if (!isActive) {
+                                $o.addClass("active").trigger("show");
+                            }
+                        } else {
+                            if (isActive) {
+                                $o.removeClass("active").trigger("hide");
+                            }
+                        }
+                    });
+                }
+            },
+
+            onDataChange : function() {
+                var hasChanges = JSON.stringify(SERVER_MODEL.locales) != JSON.stringify(LANGUAGES) ||
+                                 JSON.stringify(SERVER_MODEL.translations) != JSON.stringify(STRINGS);
+                this.$el.find("#save").prop("disabled", !hasChanges);
+            },
+
+            save : function(e) {
+                var inst = this;
+                e.preventDefault();
+                e.target.focus();
+
+                if (App.langsView.validate()) {
+
+                    $.ajax({
+                        url    : CFG.backendHost + "/translations.js",
+                        method : "POST",
+                        data   : JSON.stringify({
+                            translations : STRINGS.toJSON(true),
+                            locales      : LANGUAGES.toJSON()
+                        })
+                    }).then(
+                        function(data) {
+                            data.locales = data.locales.sort();
+                            
+                            LANGUAGES.reset(data.locales     , { parse : true });
+                            STRINGS  .reset(data.translations, { parse : true });
+
+                            SERVER_MODEL = $.extend(true, {}, {
+                                locales      : LANGUAGES.toJSON(),
+                                translations : STRINGS.toJSON()
+                            });
+                            
+                            inst.onDataChange();
+
+                            if (App.stringsList.selectedPath) {
+                                App.stringsList.selectItemByPath(
+                                    App.stringsList.selectedPath
+                                );
+                            }
+                        },
+                        function() {
+                            console.log("failure", arguments);
+                            alert("Error saving data");
+                        }
+                    );
+                }
+            },
+
+            close : function(e) {
+                e.preventDefault();
+                if (parent && parent.postMessage) {
+                    parent.postMessage('closeModals', "*");
+                }
+            }
+        });
+
+        $(function() {
+            new MainView({ el : "body" });
+        });
+
+        var App = {
+
+            //locales : new LanguageCollection(),
+
+            langsView   : new LanguagesPanel({ el : '.tab-panel[data-id="languages"]' }),
+            stringsList : new StringsList   ({ el : "#string-list" }),
+            editorList  : new EditorList    ({ el : "#editor-list" }),
+
+            localize : function(locales, translations) {
+                
+                LANGUAGES.reset(locales     , { parse : true });
+                STRINGS  .reset(translations, { parse : true });
+
+                SERVER_MODEL = $.extend(true, {}, {
+                    locales      : LANGUAGES.toJSON(),
+                    translations : STRINGS.toJSON()
+                });
+                
+                
+                this.langsView.render();
+                $(function() {
+                    $("html").addClass("loaded").removeClass("loading");
+                });
+            },
+
+            renderTranslators : function(model) {
+                this.editorList.setData(model);
+            }
+        };
+
+        getConfig("config.xml", function(err, cfg) {
+            if (err) {
+                console.error(err);
+                alert("Error fetching the configuration.\nSee console for details.");
+                return;
+            }
+            CFG = cfg;
+            CFG.backendHost = CFG.backendHost.replace(/\/?$/, "");
+            $.getScript(CFG.backendHost + "/translations.js");
+        });
+
+        </script>
+    </body>
+</html>

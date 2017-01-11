@@ -1,0 +1,26 @@
+[
+    {
+        "language": "English",
+        "langAbbr": "en-US",
+        "dir": "ltr",
+        "failback": "en-US",
+        "enabled": true,
+        "nativeName": "English"
+    },
+    {
+        "language": "Spanish",
+        "langAbbr": "es",
+        "dir": "ltr",
+        "failback": "en-US",
+        "enabled": true,
+        "nativeName": "Español"
+    },
+    {
+        "language": "Bulgarian",
+        "langAbbr": "bg",
+        "dir": "ltr",
+        "failback": "en-US",
+        "enabled": false,
+        "nativeName": "Български"
+    }
+]
