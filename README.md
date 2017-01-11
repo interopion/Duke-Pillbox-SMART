@@ -44,16 +44,16 @@ have to do the following to install the app:
 
 #### 1. The desktop app
 You can use Apache or any other web server. There is nothing special here,
-just point your DocumentRoot to the ```/pillbox-2.0/desktop_app``` folder of the
+just point your DocumentRoot to the `/build/desktop_app` folder of the
 repo and make sure that the server will load your index.html file. Here is an
 example virtual host configuration for apache (the one I use on my machine):
 
 ```apache
 <VirtualHost *:8091>
     ServerAdmin vlad.ignatov@gmail.com
-    DocumentRoot "/Users/vlad/dev/pillbox/pillbox-2.0/build/desktop_app"
+    DocumentRoot "/Users/vlad/dev/pillbox2/build/desktop_app"
     ServerName pillbox-desktop.dev
-    <Directory "/Users/vlad/dev/pillbox/pillbox-2.0/build/desktop_app">
+    <Directory "/Users/vlad/dev/pillbox2/build/desktop_app">
         Options Indexes FollowSymLinks MultiViews
         AllowOverride All
         Require all granted
@@ -68,9 +68,9 @@ domain. The example virtual host looks like this:
 ```apache
 <VirtualHost *:8090>
     ServerAdmin vlad.ignatov@gmail.com
-    DocumentRoot "/Users/vlad/dev/pillbox/pillbox-2.0/build/mobile_app"
+    DocumentRoot "/Users/vlad/dev/pillbox2/build/mobile_app"
     ServerName pillbox-mobile.dev
-    <Directory "/Users/vlad/dev/pillbox/pillbox-2.0/build/mobile_app">
+    <Directory "/Users/vlad/dev/pillbox2/build/mobile_app">
         Options Indexes FollowSymLinks MultiViews
         AllowOverride All
         Require all granted
@@ -107,31 +107,31 @@ Assuming that you are on Ubuntu server, here is what you might need to do:
 After the three servers above are prepared you will have to configure the app to reflect your URLs
 There are two configuration files.
 
-1. ```/pillbox-2.0/desktop_app/build/config.xml``` - This file does not exist in the repository.
+1. `/build/desktop_app/config.xml` - This file does not exist in the repository.
   It is in fact included in .gitignore so that everyone can maintain his own copy of it. You can copy the
-  ``/pillbox-2.0/desktop_app/build/config.example.xml`` as ``/pillbox-2.0/desktop_app/build/config.xml`` and then edit it.
-  The options are commented inside the file. You will probably have to change ``backendHost`` and ``mobileHost``.
+  `/build/desktop_app/config.example.xml` as `/build/desktop_app/config.xml` and then edit it.
+  The options are commented inside the file. You will probably have to change `backendHost` and `mobileHost`.
   Make sure they point to the correct locations. The desktop app needs to know the back-end host because it pools
   the statistics for the "View Last Exercise" tab from there. The mobileHost is needed for the QR code generation,
   opening the mobile app in new tab, Replay, Print Pillbox etc.
 
-2. ``/pillbox-2.0/mobile_app/build/config.xml`` - The same approach here - copy
-  ``/pillbox-2.0/mobile_app/build/config.example.xml`` as ``/pillbox-2.0/mobile_app/build/config.xml`` and edit the
-  ``backendHost`` variable to match your location. The mobile app needs to know the backendHost because it attempts
+2. `/build/mobile_app/config.xml` - The same approach here - copy
+  `/build/mobile_app/build/config.example.xml` as `/build/mobile_app/build/config.xml` and edit the
+  `backendHost` variable to match your location. The mobile app needs to know the backendHost because it attempts
   to save the user actions there.
 
-3. Finally the back-end nodejs app uses configuration from the file ``/pillbox-2.0/backend/build/config.json``.
+3. Finally the back-end nodejs app uses configuration from the file `/backend/build/config.json`.
   You might want to change something like the port or username/password for translations.
 
 4. Additional details to consider
   - You might have to create two folders and make sure that Node can write in them:
-    - ``/pillbox-2.0/backend/records`` - will contain one file for each patient that has ever been used
-    - ``/pillbox-2.0/backend/backups`` - will contain backups of the languages and translations (generated when you
+    - `/backend/records` - will contain one file for each patient that has ever been used
+    - `/backend/backups` - will contain backups of the languages and translations (generated when you
     change something in the translations manager)
 
 5. Finally you will have to be able to connect to the SMART service. You will need a SMART client registered via
-  https://authorize.smarthealthit.org/ . Then you have to create ``launch.html`` file at
-  ``/pillbox-2.0/desktop_app/build/launch.html``. Here is an example   in which you will just have to substitute
+  https://authorize.smarthealthit.org/ . Then you have to create `launch.html` file at
+  `/pillbox-2.0/desktop_app/build/launch.html`. Here is an example   in which you will just have to substitute
   "mypillbox" with whatever your client_id is:
   ```html
   <!DOCTYPE html>
@@ -149,7 +149,7 @@ There are two configuration files.
   </html>
   ```
   You should use the public absolute URL to this file as your launch URL setting for the SMART client and the URL
-  pointing to the ``/pillbox-2.0/desktop_app/build/index.html`` file as the redirect URI setting.
+  pointing to the `/build/desktop_app/build/index.html` file as the redirect URI setting.
 
 ## Development
 If you want to edit the source code of the back-end app (which is mostly in one file - index.js), then you will have
@@ -157,11 +157,11 @@ to restart the nodejs server to "apply" the changes. Something like this should 
 ```sh
 pm2 restart 0
 ```
-If you make changes to anything under ``/pillbox-2.0/src/``, then custom build will be required. You might have to
+If you make changes to anything under `/src/`, then custom build will be required. You might have to
 install some tools first:
 ```sh
 sudo npm install -g grunt-cli less
-cd /path/to/pillbox-2.0
+cd /path/to/pillbox2
 npm install
 ```
 Once you have those, you can build with:
