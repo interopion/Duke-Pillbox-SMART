@@ -409,6 +409,6 @@ http.createServer(function(req, res) {
     }
 
     routes[req.method][reqUrl.pathname](req, res);
-}).listen(cfg.port, function() {
-    console.log("Server listening at port %s", cfg.port);
+}).listen(cfg.port, cfg.host, function() {
+    console.log("Server listening at %s:%s", cfg.host, cfg.port);
 });

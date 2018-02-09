@@ -9,14 +9,14 @@
     "start:mobile": "node_modules/http-server/bin/http-server build/mobile_app -p 8090 -c-1",
     "start:backend": "cd backend && node ."
   },
-  "author": "MedAppTech",
+  "author": "Interopion",
   "license": "ISC",
   "repository": {
     "type": "git",
-    "url": "https://github.com/medapptech/pillbox.git"
+    "url": "git@bitbucket.org:interopion/pillbox2.git"
   },
   "bugs": {
-    "url": "https://github.com/medapptech/pillbox/issues"
+    "url": ""
   },
   "devDependencies": {
     "grunt": "~0.4.5",
