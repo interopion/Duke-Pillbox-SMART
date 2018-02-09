@@ -10,7 +10,7 @@
     "start:backend": "cd backend && node ."
   },
   "author": "Interopion",
-  "license": "ISC",
+  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "git@bitbucket.org:interopion/pillbox2.git"
